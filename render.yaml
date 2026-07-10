@@ -1,0 +1,53 @@
+# Render Blueprint — FREE tier, no credit card required.
+#
+# A single Docker web service on the free plan. It uses SQLite (no separate
+# database) and re-seeds sample invoices on every start (SEED_ON_STARTUP), so a
+# reviewer always sees a populated app. Uploaded data is not persistent on the
+# free plan (the filesystem resets on restart/deploy) — that's the trade for
+# "free, no card", and it's fine for a demo.
+#
+# In the Render dashboard: New > Blueprint, point it at this repo, paste your
+# LLM_API_KEY when prompted. After the frontend is deployed, set CORS_ORIGINS to
+# its URL.
+#
+# To upgrade to persistent Postgres + a disk (needs a card), see the commented
+# block at the bottom.
+
+services:
+  - type: web
+    name: ledgerly-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./backend/Dockerfile
+    dockerContext: ./backend
+    healthCheckPath: /health
+    envVars:
+      - key: SEED_ON_STARTUP
+        value: "true"
+      - key: CORS_ORIGINS
+        value: "http://localhost:5173"   # replace with your Vercel URL after deploy
+      - key: LLM_API_KEY
+        sync: false                        # set in the dashboard; enables extraction + NL query
+      # DATABASE_URL is intentionally unset -> the app uses local SQLite.
+
+# ---------------------------------------------------------------------------
+# PAID UPGRADE (persistent data). Requires a card on Render. To use it, move the
+# blocks below into the config above: add DATABASE_URL + STORAGE_DIR env vars,
+# a disk, and the database.
+#
+#     envVars:
+#       - key: DATABASE_URL
+#         fromDatabase:
+#           name: ledgerly-db
+#           property: connectionString
+#       - key: STORAGE_DIR
+#         value: /data/storage
+#     disk:
+#       name: ledgerly-storage
+#       mountPath: /data
+#       sizeGB: 1
+#
+# databases:
+#   - name: ledgerly-db
+#     plan: free
+# ---------------------------------------------------------------------------
