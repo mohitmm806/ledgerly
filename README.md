@@ -12,9 +12,9 @@ Live demo: [ledgerly-qb2v7skcu-mohitpro.vercel.app](http://ledgerly-qb2v7skcu-mo
 > request may take ~30–50 seconds to wake the server. Subsequent requests are
 > fast.
 
-```markdown
+
 ![Ledgerly demo](docs/demo.gif)
-```
+
 
 **Companion docs:** [DECISIONS.md](DECISIONS.md) is the one to read alongside
 this — it walks through every scoping and design decision, and a few I'd redo.
