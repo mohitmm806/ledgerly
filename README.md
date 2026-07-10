@@ -1,19 +1,20 @@
 # Ledgerly
 
-[![CI](https://github.com/mohitmm806/ledgerly/actions/workflows/ci.yml/badge.svg)](https://github.com/mohitmm806/ledgerly/actions/workflows/ci.yml)
+[CI](https://github.com/mohitmm806/ledgerly/actions/workflows/ci.yml)
 
 Reads invoices and receipts into structured data, lets you query them in plain
 English, and keeps every extracted value traceable back to where it came from on
 the page so a person can actually trust it.
 
-Live demo: https://ledgerly-lake-eta.vercel.app
+Live demo: [ledgerly-qb2v7skcu-mohitpro.vercel.app](http://ledgerly-qb2v7skcu-mohitpro.vercel.app)
 
 > Note: the demo runs on a free tier that sleeps after inactivity, so the first
 > request may take ~30–50 seconds to wake the server. Subsequent requests are
 > fast.
 
-<!-- Drop a GIF here: click a field, watch its box light up on the source; then
-a plain-English query returning rows. -->
+```markdown
+![Ledgerly demo](docs/demo.gif)
+```
 
 **Companion docs:** [DECISIONS.md](DECISIONS.md) is the one to read alongside
 this — it walks through every scoping and design decision, and a few I'd redo.
@@ -77,12 +78,14 @@ I didn't want "it works" to be an assertion, so there's a labeled eval set in
 
 Measured on the digital-PDF invoices with Groq's `llama-3.3-70b-versatile`:
 
-| Metric | Result |
-| --- | --- |
+
+| Metric                                                                 | Result       |
+| ---------------------------------------------------------------------- | ------------ |
 | Field-level accuracy (vendor / number / date / subtotal / tax / total) | 100% (24/24) |
-| Line-item precision / recall | 100% / 100% |
-| Grounding accuracy (correct fields located on the page) | 100% |
-| First-pass clean / recovered by self-correction | 100% / 0% |
+| Line-item precision / recall                                           | 100% / 100%  |
+| Grounding accuracy (correct fields located on the page)                | 100%         |
+| First-pass clean / recovered by self-correction                        | 100% / 0%    |
+
 
 I'd rather be honest than impressive: a perfect score on a small set should make
 you suspicious, so here's exactly what it does and doesn't show. This run covers
@@ -92,13 +95,13 @@ loop never needed to fire (everything passed first try). The interesting inputs
 are the ones not in this number:
 
 - **The OCR'd receipt** isn't in this local run because it needs the `tesseract`
-  binary (the deployed container has it; my dev machine didn't). OCR is where
-  grounding gets hard — noisier coordinates, money formatting — and the fallback
-  is built to degrade to a looser box rather than a wrong one.
+binary (the deployed container has it; my dev machine didn't). OCR is where
+grounding gets hard — noisier coordinates, money formatting — and the fallback
+is built to degrade to a looser box rather than a wrong one.
 - **Real-world invoices.** Testing with an actual agency invoice surfaced a 30%
-  discount the schema didn't model, so the total didn't reconcile. The validation
-  caught it and flagged the fields before I added discount support — the
-  human-in-the-loop loop doing its job.
+discount the schema didn't model, so the total didn't reconcile. The validation
+caught it and flagged the fields before I added discount support — the
+human-in-the-loop loop doing its job.
 
 Reproduce:
 
@@ -115,9 +118,9 @@ needs a live key.
 
 - **Auth / multi-tenancy.** Single-user tool for this exercise; auth is plumbing.
 - **Arbitrary document types.** Narrowing to invoices is what makes extraction
-  and honest evaluation possible.
+and honest evaluation possible.
 - **Custom OCR training.** Off-the-shelf OCR is good enough to reach the
-  interesting problem: handling what it gets wrong.
+interesting problem: handling what it gets wrong.
 - **Accounting-software sync.** Real feature, out of scope for five days.
 
 The reasoning behind each of these cuts — and every other design decision — is
@@ -141,7 +144,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173. Extraction and natural-language query call an LLM.
+Open [http://localhost:5173](http://localhost:5173). Extraction and natural-language query call an LLM.
 Pick a provider to enable them — the free option is **Groq**: set
 `LLM_PROVIDER=groq` and `GROQ_API_KEY=...` (a free key from console.groq.com, no
 credit card). Anthropic is also supported (`LLM_PROVIDER=anthropic`,
@@ -195,3 +198,4 @@ frontend/
   src/components/        upload, list, review (fields + source overlay), query
 docker-compose.yml
 ```
+
