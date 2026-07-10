@@ -6,7 +6,7 @@ Reads invoices and receipts into structured data, lets you query them in plain
 English, and keeps every extracted value traceable back to where it came from on
 the page so a person can actually trust it.
 
-Live demo: [ledgerly-qb2v7skcu-mohitpro.vercel.app](http://ledgerly-qb2v7skcu-mohitpro.vercel.app)
+Live demo: [ledgerly-tan-ten.vercel.app/](https://ledgerly-tan-ten.vercel.app/)
 
 > Note: the demo runs on a free tier that sleeps after inactivity, so the first
 > request may take ~30–50 seconds to wake the server. Subsequent requests are
